@@ -5,6 +5,7 @@ import * as React from 'react'
 import { timeoutAndRetryPromise } from '../utils/AsyncUtil'
 
 const Root: React.FC<{}> = () => {
+    const [googlePayStatus, setGooglePayStatus] = React.useState<string>('')
     const allowedCardNetworks = [ 'AMEX', 'DISCOVER', 'INTERAC', 'JCB', 'MASTERCARD', 'MIR', 'VISA' ]
     const allowedCardAuthMethods = [ 'PAN_ONLY', 'CRYPTOGRAM_3DS' ]
     const baseCardPaymentMethod = {
@@ -28,21 +29,21 @@ const Root: React.FC<{}> = () => {
 
     timeoutAndRetryPromise(paymentsClient.isReadyToPay(isReadyToPayRequest), 1000, 5)
         .then((response: any) => {
-            alert(JSON.stringify(response))
             if (response.result && response.paymentMethodPresent) {
-                alert('GooglePayOk')
+                setGooglePayStatus('GooglePayOk')
             } else if (!response.result) {
-                alert('GooglePayNotPresent')
+                setGooglePayStatus('GooglePayNotPresent')
             } else {
-                alert('GooglePayNoCard')
+                setGooglePayStatus('GooglePayNoCard')
             }
         }, () => {
-            alert('GooglePayFailed')
+            setGooglePayStatus('GooglePayFailed')
         })
 
     return (
         <div>
             <h1>Google Pay Checker</h1>
+            <p>{googlePayStatus}</p>
         </div>
     )
 }
