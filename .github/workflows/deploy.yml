@@ -1,0 +1,35 @@
+name: S3 Deployment
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.13.2]
+    steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+          ref: ${{ github.ref }}
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install
+      run: npm install
+    - name: Build
+      run: npm run build --if-present
+    - name: Deploy to S3
+      run: |
+          aws s3 cp "index.min.js" "s3://sakaba.link/google-pay/index.min.js"
+          aws s3 cp "index.html" "s3://sakaba.link/google-pay/index.html"
+    - name: CloudFront Invalidation
+      run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CF_DISTRIBUTION_ID }} --paths "/*"
