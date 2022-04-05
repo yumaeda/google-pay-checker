@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "strict": true,
+        "strictNullChecks": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noImplicitReturns": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "lib": ["es6", "dom"],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "removeComments": true,
+        "rootDir": "src",
+        "target": "es5",
+        "jsx": "react"
+    },
+    "exclude": [
+        "node_modules"
+    ],
+    "include": [
+        "./src/**/*"
+    ]
+}
