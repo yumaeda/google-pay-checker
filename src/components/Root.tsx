@@ -20,7 +20,7 @@ const Root: React.FC<{}> = () => {
         apiVersion: 2,
         apiVersionMinor: 0,
         allowedPaymentMethods: [ baseCardPaymentMethod ],
-        existingPaymentMethodRequired: false
+        existingPaymentMethodRequired: true
     }
 
     const paymentsClient = new google.payments.api.PaymentsClient({
