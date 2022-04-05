@@ -29,14 +29,12 @@ const Root: React.FC<{}> = () => {
 
     timeoutAndRetryPromise(paymentsClient.isReadyToPay(isReadyToPayRequest), 1000, 5)
         .then((response: any) => {
-            if (response.paymentMethodPresent) {
-                setGooglePayStatus('Visitor has one or more payment methods')
+            if (response.result && response.paymentMethodPresent) {
+                setGooglePayStatus('GooglePayOk')
+            } else if (!response.result) {
+                setGooglePayStatus('GooglePayNotPresent')
             } else {
-                if (!response.result) {
-                    setGooglePayStatus('Visitor is not able to provide payment information to the site')
-                } else {
-                    setGooglePayStatus('Visitor is able to provide payment information to the site')
-                }   
+                setGooglePayStatus('GooglePayNoCard')
             }
         }, () => {
             setGooglePayStatus('GooglePayFailed')
